@@ -1,0 +1,24 @@
+---
+name: SwipeStripe Coupon
+---
+
+ShopConfig:
+  extensions: 
+    - 'Coupon_Extension'
+Order:
+  extensions: 
+    - 'Coupon_OrderExtension'
+OrderForm:
+  extensions: 
+    - 'Coupon_CheckoutFormExtension'
+CheckoutPage_Controller:
+  extensions: 
+    - 'CouponModifierField_Extension'
+
+---
+Only:
+  classexists: 'ExchangeRate_Extension'
+---
+Coupon:
+  extensions: 
+    - 'ExchangeRate_Extension'
