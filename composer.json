@@ -1,0 +1,27 @@
+{
+	"name": "swipestripe/swipestripe-coupon",
+	"description": "Coupon support in SwipeStripe",
+	"homepage": "http://swipestripe.com",
+	"license": "BSD-3-Clause",
+	"type": "silverstripe-module",
+	"keywords": ["silverstripe", "ecommerce", "e-commerce", "shop", "swipestripe", "swipe stripe", "coupon", "discount", "voucher"],
+	"authors": [
+		{
+			"name": "Frank Mullenger",
+			"email": "frankmullenger@gmail.com"
+		}
+	],
+	"require":
+	{
+		"silverstripe/framework": "~3.1",
+		"silverstripe/cms": "~3.1",
+		"swipestripe/swipestripe": "2.1.*"
+	},
+	"support": 
+	{
+		"email": "info@swipestripe.com",
+		"irc": "irc://irc.freenode.org/silverstripe",
+		"forum": "http://www.silverstripe.org/e-commerce-modules/",
+		"issues": "https://github.com/frankmullenger/silverstripe-swipestripe-category/issues"
+	}
+}
