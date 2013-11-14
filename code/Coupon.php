@@ -10,7 +10,7 @@ class Coupon extends DataObject {
 	 * 
 	 * @var Array
 	 */
-	public static $db = array(
+	private static $db = array(
 		'Title' => 'Varchar',
 		'Code' => 'Varchar',
 		'Discount' => 'Decimal(18,2)',
@@ -20,15 +20,13 @@ class Coupon extends DataObject {
 	/**
 	 * Coupon rates are associated with SiteConfigs.
 	 * 
-	 * TODO The CTF in SiteConfig does not save the SiteConfig ID correctly so this is moot
-	 * 
 	 * @var unknown_type
 	 */
-	static $has_one = array(
+	private static $has_one = array(
 		'ShopConfig' => 'ShopConfig'
 	);
 
-	static $summary_fields = array(
+	private static $summary_fields = array(
 		'Title' => 'Title',
 		'Code' => 'Code',
 		'SummaryOfDiscount' => 'Discount',
@@ -129,11 +127,19 @@ class Coupon_Extension extends DataExtension {
 
 class Coupon_Admin extends ShopAdmin {
 
-	static $url_rule = 'ShopConfig/Coupon';
-	static $url_priority = 100;
-	static $menu_title = 'Shop Coupons';
+	private static $tree_class = 'ShopConfig';
 
-	public static $url_handlers = array(
+	private static $allowed_actions = array(
+		'CouponSettings',
+		'CouponSettingsForm',
+		'saveCouponSettings'
+	);
+
+	private static $url_rule = 'ShopConfig/Coupon';
+	protected static $url_priority = 100;
+	private static $menu_title = 'Shop Coupons';
+
+	private static $url_handlers = array(
 		'ShopConfig/Coupon/CouponSettingsForm' => 'CouponSettingsForm',
 		'ShopConfig/Coupon' => 'CouponSettings'
 	);
@@ -291,7 +297,7 @@ class Coupon_OrderExtension extends DataExtension {
 
 class Coupon_CheckoutFormExtension extends Extension {
 
-	function getCouponFields() {
+	public function getCouponFields() {
 
 		$fields = new FieldList();
 		$fields->push(Coupon_Field::create('CouponCode', _t('Coupon.COUPON_CODE_LABEL', 'Enter your coupon code'))
@@ -303,7 +309,7 @@ class Coupon_CheckoutFormExtension extends Extension {
 
 class Coupon_Field extends TextField {
 
-	function FieldHolder($properties = array()) {
+	public function FieldHolder($properties = array()) {
 		
 		Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
 		Requirements::javascript('swipestripe-coupon/javascript/CouponModifierField.js');

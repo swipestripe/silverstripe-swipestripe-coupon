@@ -10,8 +10,8 @@
 				data: $('.order-form').serialize(),
 				success: function(data){
 
-					var dataObj = $.parseJSON(data);
-					var $couponMessageHolder = $('#CouponCode .message');
+					var dataObj = $.parseJSON(data),
+						$couponMessageHolder = $('#CouponCode .message');
 
 					$couponMessageHolder.html(dataObj.errorMessage);
 					if (dataObj.errorMessage) {

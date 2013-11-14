@@ -17,7 +17,7 @@ class CouponModifierField extends ModificationField_Hidden {
 	 * @see FormField::FieldHolder()
 	 * @return String
 	 */
-	function FieldHolder($properties = array()) {
+	public function FieldHolder($properties = array()) {
 		Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
 		Requirements::javascript('swipestripe-coupon/javascript/CouponModifierField.js');
 		return $this->renderWith($this->template);
@@ -30,7 +30,7 @@ class CouponModifierField extends ModificationField_Hidden {
 	 * 
 	 * @param Order $order
 	 */
-	function updateValue($order, $data) {
+	public function updateValue($order, $data) {
 		return $this;
 	}
 
@@ -39,7 +39,7 @@ class CouponModifierField extends ModificationField_Hidden {
 	 * FlatFeeShippingRate it represents is valid for the Shipping country being set in the 
 	 * {@link Order}.
 	 */
-	function validate($validator){
+	public function validate($validator){
 
 		$valid = true;
 		return $valid;
@@ -51,7 +51,7 @@ class CouponModifierField extends ModificationField_Hidden {
 	 * 
 	 * @param Money $amount
 	 */
-	function setAmount(Money $amount) {
+	public function setAmount(Money $amount) {
 		$this->amount = $amount;
 		return $this;
 	}
@@ -61,7 +61,7 @@ class CouponModifierField extends ModificationField_Hidden {
 	 * 
 	 * @return String
 	 */
-	function Description() {
+	public function Description() {
 		return $this->amount->Nice();
 	}
 
@@ -70,14 +70,14 @@ class CouponModifierField extends ModificationField_Hidden {
 	 * 
 	 * @return Boolean True
 	 */
-	function modifiesSubTotal() {
+	public function modifiesSubTotal() {
 		return false;
 	}
 }
 
 class CouponModifierField_Extension extends Extension {
 
-	static $allowed_actions = array (
+	private static $allowed_actions = array (
 		'checkcoupon'
 	);
 
@@ -86,7 +86,7 @@ class CouponModifierField_Extension extends Extension {
 		Requirements::javascript('swipestripe-coupon/javascript/CouponModifierField.js');
 	}
 
-	function checkcoupon($request) {
+	public function checkcoupon($request) {
 		$data = array('errorMessage' => null);
 		$code = Convert::raw2sql($request->postVar('CouponCode'));
 		$date = date('Y-m-d');

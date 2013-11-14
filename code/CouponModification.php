@@ -2,11 +2,11 @@
 
 class CouponModification extends Modification {
 
-	public static $has_one = array(
+	private static $has_one = array(
 		'Coupon' => 'Coupon'
 	);
 
-	public static $defaults = array(
+	private static $defaults = array(
 		'SubTotalModifier' => false,
 		'SortOrder' => 200
 	);
