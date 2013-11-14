@@ -3,49 +3,49 @@
 class CouponModification extends Modification {
 
 	public static $has_one = array(
-	  'Coupon' => 'Coupon'
+		'Coupon' => 'Coupon'
 	);
 
 	public static $defaults = array(
-    'SubTotalModifier' => false,
-	  'SortOrder' => 200
+		'SubTotalModifier' => false,
+		'SortOrder' => 200
 	);
 
 	public function add($order, $value = null) {
 
-    //Get valid coupon for this order
-    $code = Convert::raw2sql($order->CouponCode);
-    $date = date('Y-m-d');
-    $coupon = Coupon::get()
-    	->where("\"Code\" = '$code' AND \"Expiry\" >= '$date'")
-    	->first();
+		//Get valid coupon for this order
+		$code = Convert::raw2sql($order->CouponCode);
+		$date = date('Y-m-d');
+		$coupon = Coupon::get()
+			->where("\"Code\" = '$code' AND \"Expiry\" >= '$date'")
+			->first();
 
-    if ($coupon && $coupon->exists()) {
+		if ($coupon && $coupon->exists()) {
 
-      //Generate the Modification
-      $mod = new CouponModification();
-      $mod->Price = $coupon->Amount($order)->getAmount();
-      $mod->Currency = $coupon->Currency;
-      $mod->Description = $coupon->Label();
-      $mod->OrderID = $order->ID;
-      $mod->Value = $coupon->ID;
-      $mod->CouponID = $coupon->ID;
-      $mod->write();
-    }
+			//Generate the Modification
+			$mod = new CouponModification();
+			$mod->Price = $coupon->Amount($order)->getAmount();
+			$mod->Currency = $coupon->Currency;
+			$mod->Description = $coupon->Label();
+			$mod->OrderID = $order->ID;
+			$mod->Value = $coupon->ID;
+			$mod->CouponID = $coupon->ID;
+			$mod->write();
+		}
 	}
 
 	public function getFormFields() {
 
 		$fields = new FieldList();
 
-    $coupon = $this->Coupon();
-    if ($coupon && $coupon->exists()) {
+		$coupon = $this->Coupon();
+		if ($coupon && $coupon->exists()) {
 
-      $field = CouponModifierField::create($this, $coupon->Label(), $coupon->Code)
-        ->setAmount($coupon->Price($this->Order()));
+			$field = CouponModifierField::create($this, $coupon->Label(), $coupon->Code)
+				->setAmount($coupon->Price($this->Order()));
 
-      $fields->push($field);
-    }
+			$fields->push($field);
+		}
 
 		return $fields;
 	}
