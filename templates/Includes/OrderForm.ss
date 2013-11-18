@@ -12,9 +12,9 @@
 
 		<% if Fields(PersonalDetails) %>
 		<section class="personal-details">
-			<% control Fields(PersonalDetails) %>
+			<% loop Fields(PersonalDetails) %>
 				$FieldHolder
-			<% end_control %>
+			<% end_loop %>
 		</section>
 		
 		<hr />
@@ -22,9 +22,9 @@
 
 		<section class="address">
 			<div id="address-shipping">
-				<% control Fields(ShippingAddress) %>
+				<% loop Fields(ShippingAddress) %>
 					$FieldHolder
-				<% end_control %>
+				<% end_loop %>
 			</div>
 		</section>
 
@@ -32,9 +32,9 @@
 	
 		<section class="address">
 			<div id="address-billing">
-				<% control Fields(BillingAddress) %>
+				<% loop Fields(BillingAddress) %>
 					$FieldHolder
-				<% end_control %>
+				<% end_loop %>
 			</div>
 		</section>
 		
@@ -57,17 +57,17 @@
 		</section>
 		
 		<section class="notes">
-			<% control Fields(Notes) %>
+			<% loop Fields(Notes) %>
 				$FieldHolder
-			<% end_control %>
+			<% end_loop %>
 		</section>
 		
 		<hr />
 		
 		<section class="payment-details">
-			<% control Fields(Payment) %>
+			<% loop Fields(Payment) %>
 				$FieldHolder
-			<% end_control %>
+			<% end_loop %>
 		</section>
 
 		<div class="clear" />
@@ -79,9 +79,9 @@
 			<div class="loading">
 				<img src="swipestripe/images/loading.gif" />
 			</div>
-			<% control Actions %>
+			<% loop Actions %>
 				$Field
-			<% end_control %>
+			<% end_loop %>
 		</div>
 		<% end_if %>
 	<% end_if %>
