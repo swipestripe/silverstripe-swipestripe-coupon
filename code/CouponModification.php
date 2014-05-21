@@ -14,7 +14,12 @@ class CouponModification extends Modification {
 	public function add($order, $value = null) {
 
 		//Get valid coupon for this order
-		$code = Convert::raw2sql($order->CouponCode);
+		if($value !== null){
+			$code = Convert::raw2sql($value);	
+		}else{
+			$code = Convert::raw2sql($order->CouponCode);		
+		}
+		
 		$date = date('Y-m-d');
 		$coupon = Coupon::get()
 			->where("\"Code\" = '$code' AND \"Expiry\" >= '$date'")
