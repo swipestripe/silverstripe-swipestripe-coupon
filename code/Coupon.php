@@ -3,7 +3,7 @@
  * Coupon rates that can be set in {@link SiteConfig}. Several flat rates can be set 
  * for any supported shipping country.
  */
-class Coupon extends DataObject {
+class Coupon extends DataObject implements PermissionProvider {
 	
 	/**
 	 * Fields for this tax rate
@@ -32,6 +32,33 @@ class Coupon extends DataObject {
 		'SummaryOfDiscount' => 'Discount',
 		'Expiry' => 'Expiry'
 	);
+
+    public function providePermissions()
+    {
+        return array(
+            'EDIT_COUPONS' => 'Edit Coupons',
+        );
+    }
+
+    public function canEdit($member = null)
+    {
+        return Permission::check('EDIT_COUPONS');
+    }
+
+    public function canView($member = null)
+    {
+        return true;
+    }
+
+    public function canDelete($member = null)
+    {
+        return Permission::check('EDIT_COUPONS');
+    }
+
+    public function canCreate($member = null)
+    {
+        return Permission::check('EDIT_COUPONS');
+    }
 	
 	/**
 	 * Field for editing a {@link Coupon}.
