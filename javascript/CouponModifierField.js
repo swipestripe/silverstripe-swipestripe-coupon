@@ -1,6 +1,6 @@
 (function($) {
 	$(document).ready(function() {
-		$('#apply-coupon-js').live('click', function() {
+		$( document ).on( 'click', $('#apply-coupon-js'), function() {
 
 			$('.order-form').entwine('sws').updateCart();
 
