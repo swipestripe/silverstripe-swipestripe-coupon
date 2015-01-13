@@ -13,6 +13,7 @@ class Coupon extends DataObject implements PermissionProvider {
 	private static $db = array(
 		'Title' => 'Varchar',
 		'Code' => 'Varchar',
+		'Type' => 'Varchar',
 		'Discount' => 'Decimal(18,2)',
 		'Expiry' => 'Date'
 	);
@@ -29,6 +30,7 @@ class Coupon extends DataObject implements PermissionProvider {
 	private static $summary_fields = array(
 		'Title' => 'Title',
 		'Code' => 'Code',
+		'Type' => 'Type',
 		'SummaryOfDiscount' => 'Discount',
 		'Expiry' => 'Expiry'
 	);
@@ -72,8 +74,10 @@ class Coupon extends DataObject implements PermissionProvider {
 				$tabMain = new Tab('CouponRate',
 					TextField::create('Title', _t('Coupon.TITLE', 'Title')),
 					TextField::create('Code', _t('Coupon.CODE', 'Code')),
+					DropdownField::create('Type', _t('Coupon.TYPE', 'Discount type'),
+					  array('Fixed' => 'Fixed amount', 'Percentage' => 'Percentage' ))->setEmptyString('(Select discount type)'),
 					NumericField::create('Discount', _t('Coupon.DISCOUNT', 'Coupon discount'))
-						->setRightTitle('As a percentage (%)'),
+						->setRightTitle('As a percentage (%) or fixed amount depending on the type selected'),
 					DateField::create('Expiry')
 						->setConfig('showcalendar', true)
 				)
@@ -97,7 +101,14 @@ class Coupon extends DataObject implements PermissionProvider {
 	 * @return String
 	 */
 	public function SummaryOfDiscount() {
-		return $this->Discount . ' %';
+		if($this->Type == 'Percentage')
+		{
+			return $this->Discount . ' %';
+		}
+		else if($this->Type == 'Fixed')
+		{
+			return $this->Discount;
+		}
 	}
 
 	public function Amount($order) {
@@ -118,7 +129,14 @@ class Coupon extends DataObject implements PermissionProvider {
 				$total += $mod->Amount()->getAmount();
 			}
 		}
-		$amount->setAmount(- ($total * ($this->Discount / 100)));
+		if($this->Type == 'Fixed'){
+
+			$amount->setAmount(- $this->Discount);
+		}
+		else if($this->Type == 'Percentage')
+		{
+			$amount->setAmount(- ($total * ($this->Discount / 100)));
+		}
 
 		return $amount;
 	}
