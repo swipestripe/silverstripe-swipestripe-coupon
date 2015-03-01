@@ -14,6 +14,7 @@ class Coupon extends DataObject implements PermissionProvider {
 		'Title' => 'Varchar',
 		'Code' => 'Varchar',
 		'Discount' => 'Decimal(18,2)',
+		'StartDate' => 'Date',
 		'Expiry' => 'Date'
 	);
 	
@@ -30,6 +31,7 @@ class Coupon extends DataObject implements PermissionProvider {
 		'Title' => 'Title',
 		'Code' => 'Code',
 		'SummaryOfDiscount' => 'Discount',
+		'StartDate' => 'Start Date',
 		'Expiry' => 'Expiry'
 	);
 
@@ -70,10 +72,14 @@ class Coupon extends DataObject implements PermissionProvider {
 		return new FieldList(
 			$rootTab = new TabSet('Root',
 				$tabMain = new Tab('CouponRate',
-					TextField::create('Title', _t('Coupon.TITLE', 'Title')),
+					TextField::create('Title', _t('Coupon.TITLE', 'Title'))
+						->setRightTitle('This \'Title\' will appear in order summary.'),
 					TextField::create('Code', _t('Coupon.CODE', 'Code')),
 					NumericField::create('Discount', _t('Coupon.DISCOUNT', 'Coupon discount'))
 						->setRightTitle('As a percentage (%)'),
+					DateField::create('StartDate')
+						->setRightTitle('Leave it blank if start date is not required')
+						->setConfig('showcalendar', true),
 					DateField::create('Expiry')
 						->setConfig('showcalendar', true)
 				)
@@ -114,7 +120,7 @@ class Coupon extends DataObject implements PermissionProvider {
 		$mods = $order->TotalModifications();
 
 		if ($mods && $mods->exists()) foreach ($mods as $mod) {
-			if ($mod->ClassName != 'CouponModification') {
+			if ($mod->ClassName != 'CouponModification' && $mod->ClassName != 'FlatFeeShippingModification') {
 				$total += $mod->Amount()->getAmount();
 			}
 		}
@@ -148,7 +154,8 @@ class Coupon_Extension extends DataExtension {
 	 * @see DataObjectDecorator::extraStatics()
 	 */
 	private static $has_many = array(
-		'Coupons' => 'Coupon'
+		'Coupons' => 'Coupon',
+		'AmountCoupons' => 'AmountCoupon'
 	);
 }
 
@@ -232,7 +239,15 @@ class Coupon_Admin extends ShopAdmin {
 					GridField::create(
 						'Coupons',
 						'Coupons',
-						$shopConfig->Coupons(),
+						$shopConfig->Coupons()->filter(array('ClassName' => 'Coupon')),
+						GridFieldConfig_HasManyRelationEditor::create()
+					)
+				)
+				, new Tab('CouponAmount',
+					GridField::create(
+						'AmountCoupons',
+						'Coupons - Amount',
+						$shopConfig->AmountCoupons(),
 						GridFieldConfig_HasManyRelationEditor::create()
 					)
 				)
