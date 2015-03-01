@@ -147,7 +147,7 @@ class Coupon_Extension extends DataExtension {
 	 * 
 	 * @see DataObjectDecorator::extraStatics()
 	 */
-	public static $has_many = array(
+	private static $has_many = array(
 		'Coupons' => 'Coupon'
 	);
 }
@@ -317,7 +317,7 @@ class Coupon_OrderExtension extends DataExtension {
 	 * 
 	 * @see DataObjectDecorator::extraStatics()
 	 */
-	public static $db = array(
+	private static $db = array(
 		'CouponCode' => 'Varchar'
 	);
 }
@@ -343,4 +343,3 @@ class Coupon_Field extends TextField {
 		return $this->renderWith('CouponField');
 	}
 }
-

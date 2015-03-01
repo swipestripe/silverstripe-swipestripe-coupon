@@ -1,0 +1,29 @@
+fi:
+  Coupon_Admin:
+    MENUTITLE: 'Alekupongit'
+  CheckoutForm:
+    ApplyCoupon: 'Käytä'
+    YOUR_ORDER: 'Tilauksesi'
+  CheckoutFormOrder:
+    NO_ITEMS_IN_CART: 'Ostoskoriassasi ei ole tuotteita.'
+    PRICE: 'Hinta ({currency})'
+    PRODUCT: 'Tuote'
+    QUANTITY: 'Määrä'
+    SUB_TOTAL: 'Yhteensä'
+    TOTAL: 'Yhteensä'
+    TOTAL_COLUMN: 'Yhteensä ({currency})'
+  Coupon:
+    CODE: 'Koodi'
+    COUPON: 'Alekuponki'
+    COUPON_CODE_LABEL: 'Syötä alennuskoodi'
+    DISCOUNT: 'Alennus'
+    PLURALNAME: 'Kupongit'
+    SINGULARNAME: 'Kuponki'
+    TITLE: 'Otsikko'
+    COUPON_EXPIRED_INVALID: 'Koodi on vanhentunut tai virheellinen'
+    COUPON_VALID_OVER: 'Koodi toimii vain tilauksissa, joiden arvo on minimissään '
+  CouponModification:
+    PLURALNAME: 'Kuponkien muokkaukset'
+    SINGULARNAME: 'Kupongin muokkaus'
+  GridFieldDetailForm:
+    Save: 'Tallenna'
