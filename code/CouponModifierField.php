@@ -109,7 +109,7 @@ class CouponModifierField_Extension extends Extension {
 					foreach ($Items as $ItemDO){
 						$ProductItem = $ItemDO->Product();
 						if($ProductItem && $ProductItem->ID && $ProductItem->IsSale()){
-							$data['errorMessage'] 		= 'Sorry, coupon codes are not valid for use on sale items.';
+							$data['errorMessage'] 		= _t('Coupon.COUPON_SALE_ITEMS','Sorry, coupon codes are not valid for use on sale items.');
 							$data['detail']['coupon']	= $code;
 							$data['detail']['status']	= 'Invalid';
 							return json_encode($data);							
@@ -143,4 +143,4 @@ class CouponModifierField_Extension extends Extension {
 		
 		return json_encode($data);
 	}
-}
+}	
