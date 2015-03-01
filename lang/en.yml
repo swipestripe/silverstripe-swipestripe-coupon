@@ -22,6 +22,7 @@ en:
     TITLE: Title
     COUPON_EXPIRED_INVALID: 'Coupon is expired or invalid'
     COUPON_VALID_OVER: 'Coupon is only valid for order over '
+    COUPON_SALE_ITEMS: 'Sorry, coupon codes are not valid for use on sale items.'
   CouponModification:
     PLURALNAME: 'Coupon Modifications'
     SINGULARNAME: 'Coupon Modification'

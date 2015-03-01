@@ -22,6 +22,7 @@ fi:
     TITLE: 'Otsikko'
     COUPON_EXPIRED_INVALID: 'Koodi on vanhentunut tai virheellinen'
     COUPON_VALID_OVER: 'Koodi toimii vain tilauksissa, joiden arvo on minimissään '
+    COUPON_SALE_ITEMS: 'Pahoittelut, koodi ei ole käytettävissä myytäviin tuotteisiin.'
   CouponModification:
     PLURALNAME: 'Kuponkien muokkaukset'
     SINGULARNAME: 'Kupongin muokkaus'
