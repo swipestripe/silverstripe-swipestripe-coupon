@@ -91,13 +91,56 @@ class CouponModifierField_Extension extends Extension {
 		$code = Convert::raw2sql($request->postVar('CouponCode'));
 		$date = date('Y-m-d');
 		$coupon = Coupon::get()
-			->where("\"Code\" = '$code' AND \"Expiry\" >= '$date'")
+			->where("\"Code\" = '$code' AND ((\"StartDate\" IS NULL AND \"Expiry\" >= '$date') OR (\"StartDate\" IS NOT NULL AND \"StartDate\" <= '$date' AND \"Expiry\" >= '$date'))")
 			->first();
 
 		if (!$coupon || !$coupon->exists()) {
-			$data['errorMessage'] = 'Coupon is invalid or expired.';
+			$data['errorMessage'] 		= _t('Coupon.COUPON_EXPIRED_INVALID', 'Coupon is invalid or expired.');
+			$data['detail']['coupon']	= $code;
+			$data['detail']['status']	= 'Invalid';
+		}else{
+		
+			$order = Cart::get_current_order();
+			
+			if($order && $order->ID){
+				//check is there sale item in this order.
+				$Items = $order->Items();
+				if($Items && $Items->Count()){
+					foreach ($Items as $ItemDO){
+						$ProductItem = $ItemDO->Product();
+						if($ProductItem && $ProductItem->ID && $ProductItem->IsSale()){
+							$data['errorMessage'] 		= _t('Coupon.COUPON_SALE_ITEMS','Sorry, coupon codes are not valid for use on sale items.');
+							$data['detail']['coupon']	= $code;
+							$data['detail']['status']	= 'Invalid';
+							return json_encode($data);							
+						}
+					}
+				}
+				
+				$orderSubTotal = $order->SubTotalPrice()->getAmount();
+				
+				if($orderSubTotal && isset($coupon->OrderOver) && $coupon->OrderOver > $orderSubTotal){
+					$data['errorMessage'] 		= _t('Coupon.COUPON_VALID_OVER', 'Coupon is only valid for order over ') . $coupon->CouponConditionPrice()->Nice();
+					$data['detail']['coupon']	= $code;
+					$data['detail']['status']	= 'Invalid';
+				}
+			}
+		
 		}
-
+		
+		if($data['errorMessage'] === null){
+			if($coupon->ClassName == 'Coupon'){
+				$discount = number_format($coupon->Discount, 2) . '%';
+			}else{
+				$discount = number_format($coupon->DiscountAmount, 2);
+			}
+			
+			$data['detail']['coupon']	= $code;
+			$data['detail']['status']	= 'Valid';
+			$data['detail']['name']		= $coupon->Title;
+			$data['detail']['discount']	= $discount;
+		}
+		
 		return json_encode($data);
 	}
-}
+}	

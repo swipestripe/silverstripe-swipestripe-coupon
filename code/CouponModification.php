@@ -20,13 +20,30 @@ class CouponModification extends Modification {
 			$code = Convert::raw2sql($order->CouponCode);		
 		}
 		
+		$orderSubTotal = $order->SubTotalPrice()->getAmount();
+		
 		$date = date('Y-m-d');
 		$coupon = Coupon::get()
-			->where("\"Code\" = '$code' AND \"Expiry\" >= '$date'")
+			->where("\"Code\" = '$code' AND ((\"StartDate\" IS NULL AND \"Expiry\" >= '$date') OR (\"StartDate\" IS NOT NULL AND \"StartDate\" <= '$date' AND \"Expiry\" >= '$date'))")
 			->first();
-
+		
 		if ($coupon && $coupon->exists()) {
-
+			//check is there sale item in this order.
+			$Items = $order->Items();
+			if($Items && $Items->Count()){
+				foreach ($Items as $ItemDO){
+					$ProductItem = $ItemDO->Product();
+					if($ProductItem && $ProductItem->ID && $ProductItem->IsSale()){
+						return false;
+					}
+				}
+			}
+			
+			//check coupon condition.
+			if($orderSubTotal && isset($coupon->OrderOver) && $coupon->OrderOver && $coupon->OrderOver > $orderSubTotal){
+				return false;
+			}
+			
 			//Generate the Modification
 			$mod = new CouponModification();
 			$mod->Price = $coupon->Amount($order)->getAmount();
